@@ -56,6 +56,8 @@ public class DBRecord implements Serializable {
 		return message;
 	}
 
-
-
+	@Override
+	public String toString() {
+		return message;
+	}
 }

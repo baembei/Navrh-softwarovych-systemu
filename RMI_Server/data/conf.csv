@@ -1,6 +1,6 @@
 "listdb";;;
 "insert";"adresy";"1";"Jan Novotný, Zikova 7, Praha"
-"createdb";"adresy";;
+"createdb";"adresy1";;
 "listdb";;;
 "insert";"adresy";"256";"Adéla Krátká, Lovosice 345"
 "update";"adresy";"256";"Adéla Dlouhá, Lovosice 345"

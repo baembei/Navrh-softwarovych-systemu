@@ -12,38 +12,38 @@ import nss.cviceni2.server.KeyNotFoundException;
 public interface ServerInterface extends Remote {
 
     /**
-     * vyp�e existuj�c� datab�ze
+     * vypise existujici databaze
      */
     public String[] listDB() throws RemoteException;
 
     /**
-     * vytvo�� datab�zi dan�ho jm�na
+     * vytvori databazi daneho jmena
      */
     public boolean createDB(String dbname) throws DBExistException, RemoteException;
 
     /**
-     * vytvo�� v datab�zi nov� z�znam
+     * vytvori v databazi novy zaznam
      */
     public Integer insert(String dbname, Integer key, String message) throws DBNotFoundException, DuplicateKeyException, RemoteException;
 
     /**
-     * aktualizuje z�znam dan� kl��em key na hodnotu message
+     * aktualizuje zaznam dany klicem key na hodnotu message
      */
     public Integer update(String dbname, Integer key, String message) throws DBNotFoundException, KeyNotFoundException, RemoteException;
 
     /**
-     * vr�t� zpr�vu p��slu�ej�c� dan�mu kl��i
+     * vrati zpravu prislusejici danemu klici
      */
     public DBRecord get(String dbname, Integer key) throws DBNotFoundException, KeyNotFoundException, RemoteException;
 
     /**
-     * vr�t� pole z�znam� p��slu�ej�c� dan�m kl���m, operace se povede bez chyby
-     * pouze tehdy, pokud se povedou naj�t v�echny odpov�di
+     * vrati pole zaznamu prislusejici danym klicum, operace se povede bez chyby
+     * pouze tehdy, pokud se povedou najit vsechny odpovedi
      */
     public DBRecord[] getA(String dbname, Integer[] key) throws DBNotFoundException, KeyNotFoundException, RemoteException;
 
     /**
-     * zap�e zm�ny na disk
+     * zapise zmeny na disk
      */
     public void flush() throws RemoteException;
 }

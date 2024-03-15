@@ -2,10 +2,17 @@ package nss.cviceni2.client;
 
 import java.io.FileNotFoundException;
 import java.rmi.RMISecurityManager;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.sql.SQLOutput;
 
+import com.sun.management.DiagnosticCommandMBean;
+import nss.cviceni2.compute.DBRecord;
 import nss.cviceni2.compute.ServerInterface;
+import nss.cviceni2.server.CsvReader;
+import nss.cviceni2.server.DBExistException;
+import nss.cviceni2.server.DBNotFoundException;
 
 public class Client {
 
@@ -37,8 +44,76 @@ public class Client {
 
 			 serveri = (ServerInterface) registry.lookup(name);
 
-			 //TODO HERE continue.. :-)
-
+			 //TODO HERE continue.. :-(  :-(  :-(  :-(  :-(  :-(  :-(
+			CsvReader reader = new CsvReader(conf_file, ';');
+			while (reader.readRecord()) {
+				String tscreate = reader.get(0);
+				System.out.println(">> " + tscreate);
+				switch (tscreate) {
+					case "listdb":
+						String[] databases = serveri.listDB();
+						System.out.println("<< Databases:");
+						for (String db : databases) {
+							System.out.println("- " + db);
+						}
+						break;
+					case "createdb":
+						String dbName = reader.get(1);
+						try {
+							boolean created = serveri.createDB(dbName);
+							if (created) {
+								System.out.println("<< Database \"" + dbName + "\" created");
+							} else {
+								System.out.println("<< Database \"" + dbName + "\" already exists");
+							}
+						} catch (RemoteException e) {
+							System.out.println("<< ERROR - " + e.getMessage());
+						}
+						break;
+					case "insert":
+						String dbNameInsert = reader.get(1);
+						String value = reader.get(2);
+						int intValue = value.isEmpty() ? 0 : Integer.parseInt(value);
+						String message = reader.get(3);
+						try {
+							serveri.insert(dbNameInsert, intValue, message);
+							System.out.println("<< DB \"" + dbNameInsert + "\" - record inserted");
+						} catch (RemoteException e) {
+							System.out.println("<< ERROR - " + e.getMessage());
+						}
+						break;
+					case "update":
+						String dbNameUpdate = reader.get(1);
+						String valueUpdate = reader.get(2);
+						int intValueUpdate = valueUpdate.isEmpty() ? 0 : Integer.parseInt(valueUpdate);
+						String messageUpdate = reader.get(3);
+						try {
+							serveri.update(dbNameUpdate, intValueUpdate, messageUpdate);
+							System.out.println("<< DB \"" + dbNameUpdate + "\" - record updated");
+						} catch (RemoteException e) {
+							System.out.println("<< ERROR - " + e.getMessage());
+						}
+						break;
+					case "get":
+						String dbNameGet = reader.get(1);
+						String valueGet = reader.get(2);
+						int intValueGet = valueGet.isEmpty() ? 0 : Integer.parseInt(valueGet);
+						try{
+							DBRecord getmessage = serveri.get(dbNameGet,intValueGet);
+							System.out.println("<< DB message: " + getmessage);
+						}catch (RemoteException e){
+							System.out.println("<< ERROR - " + e.getMessage());
+						}
+						break;
+					case "flush":
+						serveri.flush();
+						System.out.println("<< Changes flushed to disk :)");
+						break;
+					default:
+						System.out.println("<< ERROR - command \"" + tscreate + "\" not implemented");
+						break;
+				}
+			}
 		} catch (Exception e) {
 			System.err.println("Data exception: " + e.getMessage());
 		}

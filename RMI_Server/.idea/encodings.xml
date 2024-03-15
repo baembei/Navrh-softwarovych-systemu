@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/data/adresy.csv" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/data/conf.csv" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/data/zaloha/conf2.csv" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/run/java.policy" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/nss/cviceni2/server/ServerImpl.java" charset="UTF-8" />
   </component>

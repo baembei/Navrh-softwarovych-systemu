@@ -6,6 +6,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.sun.management.DiagnosticCommandMBean;
 import nss.cviceni2.compute.DBRecord;
@@ -99,9 +101,26 @@ public class Client {
 						String valueGet = reader.get(2);
 						int intValueGet = valueGet.isEmpty() ? 0 : Integer.parseInt(valueGet);
 						try{
-							DBRecord getmessage = serveri.get(dbNameGet,intValueGet);
-							System.out.println("<< DB message: " + getmessage);
+							DBRecord dbRecord = serveri.get(dbNameGet,intValueGet);
+							System.out.println("<< DB message: " + dbRecord.getMessage());
 						}catch (RemoteException e){
+							System.out.println("<< ERROR - " + e.getMessage());
+						}
+						break;
+					case "geta":
+						String dbNameGetA = reader.get(1);
+						Integer[] idsGetA = new Integer[reader.getColumnCount() - 2];
+						for (int i = 2; i < reader.getColumnCount(); i++) {
+							String idString = reader.get(i);
+							int id = idString.isEmpty() ? 0 : Integer.parseInt(idString);
+							idsGetA[i - 2] = id;
+						}
+						try {
+							DBRecord[] recordsGetA = serveri.getA(dbNameGetA, idsGetA);
+							for (DBRecord record : recordsGetA) {
+								System.out.println("<< DB message: " + record.getMessage());
+							}
+						} catch (RemoteException e) {
 							System.out.println("<< ERROR - " + e.getMessage());
 						}
 						break;
